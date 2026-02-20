@@ -7,7 +7,7 @@ vsce package
 ## Run
 
 ```bash
-# code --uninstall-extension run-code-block-1.0.0.vsix
+
 code --install-extension run-code-block-1.0.0.vsix
 ```
 

@@ -1,4 +1,7 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as os from 'os';
 
 // ─── Language Runners ────────────────────────────────────────────────
 interface RunnerConfig {
@@ -205,8 +208,30 @@ function getTerminal(): vscode.Terminal {
 async function runBlock(block: CodeBlock): Promise<void> {
   const terminal = getTerminal();
   terminal.show(true);
-  // Wrap in { } so bash treats multiline code as one compound command
-  terminal.sendText(`{ ${block.code}\n}`);
+
+  if (block.languageId === 'shellscript') {
+    // Shell code runs directly in the terminal
+    terminal.sendText(`{ ${block.code}\n}`);
+    return;
+  }
+
+  // All other languages: write to temp file and run via runner command
+  const runner = RUNNERS[block.languageId];
+  if (!runner) {
+    vscode.window.showErrorMessage(`No runner configured for language: ${block.languageId}`);
+    return;
+  }
+
+  const config = vscode.workspace.getConfiguration('runCodeBlock');
+  const customRunners = config.get<Record<string, string>>('customRunners', {});
+  const commandTemplate = customRunners[block.languageId] ?? runner.command;
+
+  const tmpDir = os.tmpdir();
+  const tmpFile = path.join(tmpDir, `run-code-block-${Date.now()}${runner.ext}`);
+  fs.writeFileSync(tmpFile, block.code, 'utf-8');
+
+  const cmd = commandTemplate.replace(/\{file\}/g, tmpFile);
+  terminal.sendText(cmd);
 }
 
 // ─── CodeLens Provider ───────────────────────────────────────────────

@@ -2,7 +2,7 @@
   "name": "run-code-block",
   "displayName": "Run Code Block",
   "description": "Run an entire code block in one click via a CodeLens button or keyboard shortcut",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "Reecepbcups",
   "repository": {
     "type": "git",

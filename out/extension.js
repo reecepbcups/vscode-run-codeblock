@@ -36,6 +36,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
+const fs = __importStar(require("fs"));
+const path = __importStar(require("path"));
+const os = __importStar(require("os"));
 const RUNNERS = {
     javascript: { command: 'node "{file}"', ext: '.js' },
     typescript: { command: 'npx ts-node "{file}"', ext: '.ts' },
@@ -200,8 +203,25 @@ function getTerminal() {
 async function runBlock(block) {
     const terminal = getTerminal();
     terminal.show(true);
-    // Wrap in { } so bash treats multiline code as one compound command
-    terminal.sendText(`{ ${block.code}\n}`);
+    if (block.languageId === 'shellscript') {
+        // Shell code runs directly in the terminal
+        terminal.sendText(`{ ${block.code}\n}`);
+        return;
+    }
+    // All other languages: write to temp file and run via runner command
+    const runner = RUNNERS[block.languageId];
+    if (!runner) {
+        vscode.window.showErrorMessage(`No runner configured for language: ${block.languageId}`);
+        return;
+    }
+    const config = vscode.workspace.getConfiguration('runCodeBlock');
+    const customRunners = config.get('customRunners', {});
+    const commandTemplate = customRunners[block.languageId] ?? runner.command;
+    const tmpDir = os.tmpdir();
+    const tmpFile = path.join(tmpDir, `run-code-block-${Date.now()}${runner.ext}`);
+    fs.writeFileSync(tmpFile, block.code, 'utf-8');
+    const cmd = commandTemplate.replace(/\{file\}/g, tmpFile);
+    terminal.sendText(cmd);
 }
 // ─── CodeLens Provider ───────────────────────────────────────────────
 class RunBlockCodeLensProvider {

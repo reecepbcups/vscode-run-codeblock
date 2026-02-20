@@ -7,8 +7,9 @@ Run any code block with a single click. Works in **source files** and **Markdown
 ```bash
 npm install
 npm install -g @vscode/vsce
-vsce package --allow-missing-repository
+vsce package
 code --install-extension run-code-block-*.vsix
+# code --uninstall-extension reecepbcups.run-code-block
 ```
 
 ## Features
