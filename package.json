@@ -3,7 +3,11 @@
   "displayName": "Run Code Block",
   "description": "Run an entire code block in one click via a CodeLens button or keyboard shortcut",
   "version": "1.0.0",
-  "publisher": "your-publisher-name",
+  "publisher": "Reece Williams",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:reecepbcups/vscode-run-codeblock.git"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
