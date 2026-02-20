@@ -2,6 +2,15 @@
 
 Run any code block with a single click. Works in **source files** and **Markdown fenced code blocks**.
 
+## Install
+
+```bash
+npm install
+npm install -g @vscode/vsce
+vsce package --allow-missing-repository
+code --install-extension run-code-block-*.vsix
+```
+
 ## Features
 
 - **▶ Run buttons** appear above every code block via CodeLens — just click to execute
@@ -52,22 +61,6 @@ Add to your `settings.json`:
 ```
 
 Use `{file}` as a placeholder for the temporary file path.
-
-## Installation (from source)
-
-```bash
-cd run-code-block
-npm install
-npm run compile
-```
-
-Then press `F5` in VS Code to launch the Extension Development Host, or package it:
-
-```bash
-npm install -g @vscode/vsce
-vsce package
-code --install-extension run-code-block-1.0.0.vsix
-```
 
 ## Requirements
 
