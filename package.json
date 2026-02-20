@@ -1,0 +1,78 @@
+{
+  "name": "run-code-block",
+  "displayName": "Run Code Block",
+  "description": "Run an entire code block in one click via a CodeLens button or keyboard shortcut",
+  "version": "1.0.0",
+  "publisher": "your-publisher-name",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:python",
+    "onLanguage:shellscript",
+    "onLanguage:ruby",
+    "onLanguage:go",
+    "onLanguage:rust",
+    "onLanguage:java",
+    "onLanguage:c",
+    "onLanguage:cpp",
+    "onLanguage:php",
+    "onLanguage:perl",
+    "onLanguage:lua",
+    "onLanguage:r",
+    "onLanguage:markdown"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "runCodeBlock.run",
+        "title": "Run Code Block",
+        "icon": "$(play)"
+      },
+      {
+        "command": "runCodeBlock.runAtCursor",
+        "title": "Run Code Block at Cursor"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "runCodeBlock.runAtCursor",
+        "key": "ctrl+shift+r",
+        "mac": "cmd+shift+r",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "Run Code Block",
+      "properties": {
+        "runCodeBlock.showCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show ▶ Run Block buttons above code blocks"
+        },
+        "runCodeBlock.reuseTerminal": {
+          "type": "boolean",
+          "default": true,
+          "description": "Reuse the same terminal for running code blocks"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.3.0"
+  }
+}
